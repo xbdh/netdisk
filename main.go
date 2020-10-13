@@ -5,7 +5,6 @@ import (
 	"netdisk/dao/mysql"
 	"netdisk/dao/redis"
 	"netdisk/logger"
-	"netdisk/pkg/snowflake"
 	"netdisk/router"
 	"netdisk/setting"
 )
@@ -32,10 +31,10 @@ func main() {
 	}
 	defer redis.Close()
 
-	if err := snowflake.Init(setting.Conf.StartTime, setting.Conf.MachineID); err != nil {
-		fmt.Printf("init snowflake failed, err:%v\n", err)
-		return
-	}
+	//if err := snowflake.Init(setting.Conf.StartTime, setting.Conf.MachineID); err != nil {
+	//	fmt.Printf("init snowflake failed, err:%v\n", err)
+	//	return
+	//}
 	//// 初始化gin框架内置的校验器使用的翻译器
 	//if err := controller.InitTrans("zh"); err != nil {
 	//	fmt.Printf("init validator trans failed, err:%v\n", err)

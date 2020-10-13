@@ -1,6 +1,8 @@
 package router
 
 import (
+	"netdisk/controller"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,6 +13,10 @@ func SetupRouter(mode string) *gin.Engine {
 
 	r := gin.Default()
 
+	r.POST("/file", controller.FileUpload)
+	r.GET("/files", controller.FileAllInfo)
+	r.GET("/file/:file_id", controller.FileInfo)
+	r.GET("/file/:file_id", controller.FileDownload)
 	//r := gin.New()
 	//r.Use(logger.GinLogger(), logger.GinRecovery(true))
 
