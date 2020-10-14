@@ -3,12 +3,14 @@ package controller
 import (
 	"fmt"
 	"io/ioutil"
+	"math"
 	"net/http"
 	"netdisk/dao/mysql"
 	"netdisk/model"
 	"netdisk/pkg/snowflake"
 	"netdisk/util"
 	"os"
+	"strconv"
 
 	"go.uber.org/zap"
 
@@ -18,6 +20,7 @@ import (
 type MutiPartFileInfo struct {
 	UserName   string `json:"user_name"`
 	FileName   string `json:"file_name"`
+	FileId     uint64 `json:"file_id"`
 	Hash       string `json:"hash"`
 	Size       int64  `json:"size"`
 	ChunkSize  int    `json:"chunk_size"`
@@ -120,8 +123,25 @@ func FileMultiPartUpload(c *gin.Context) {
 
 }
 func FileMultiPartInit(c *gin.Context) {
+	username := c.PostForm("username")
+	filehash := c.PostForm("filehash")
+	filesize, _ := strconv.Atoi(c.PostForm("filesize"))
+	filename := c.PostForm("filename")
+	sfid, _ := snowflake.GetID()
+
+	filetotalinfo := MutiPartFileInfo{
+		UserName:   username,
+		FileName:   filename,
+		FileId:     sfid,
+		Hash:       filehash,
+		Size:       int64(filesize),
+		ChunkSize:  10 * 1024 * 2014,
+		ChunkCount: int(math.Ceil(float64(filesize) / (10 * 1024 * 1024))),
+	}
+	c.JSON(http.StatusOK, filetotalinfo)
 
 }
 func FileMultiPartComplete(c *gin.Context) {
+	form, _ := c.MultipartForm()
 
 }
