@@ -13,8 +13,8 @@ func SetupRouter(mode string) *gin.Engine {
 
 	r := gin.Default()
 
-	r.POST("signup", controller.SignUp)
-	r.POST("login", controller.Login)
+	r.POST("/signup", controller.SignUp)
+	r.POST("/login", controller.Login)
 
 	r.POST("/file", controller.FileUpload)
 	r.GET("/files", controller.FileAllInfo)
