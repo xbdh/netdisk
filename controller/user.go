@@ -3,32 +3,18 @@ package controller
 import (
 	"errors"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"net/http"
 	"netdisk/dao/mysql"
 	"netdisk/model"
 	"netdisk/pkg/jwt"
 	"netdisk/util"
 	"strings"
+
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-package controller
-
-import (
-"netdisk/dao/mysql"
-"netdisk/model"
-"netdisk/pkg/jwt"
-"errors"
-"fmt"
-"net/http"
-"strings"
-
-"github.com/gin-gonic/gin"
-"go.uber.org/zap"
-)
-
-func SignUpHandler(c *gin.Context) {
+func SignUp(c *gin.Context) {
 	// 1.获取请求参数 2.校验数据有效性
 	var fo model.RegisterForm
 	if err := c.ShouldBindJSON(&fo); err != nil {
@@ -52,7 +38,7 @@ func SignUpHandler(c *gin.Context) {
 	util.ResponseSuccess(c, nil)
 }
 
-func LoginHandler(c *gin.Context) {
+func Login(c *gin.Context) {
 	var u model.User
 	if err := c.ShouldBindJSON(&u); err != nil {
 		zap.L().Error("invalid params", zap.Error(err))
@@ -99,4 +85,3 @@ func RefreshTokenHandler(c *gin.Context) {
 		"refresh_token": rToken,
 	})
 }
-

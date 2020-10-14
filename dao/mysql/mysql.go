@@ -13,6 +13,8 @@ import (
 
 var Db *gorm.DB
 
+//var SqlDb ,_=Db.DB()
+
 // Init 初始化MySQL连接
 func Init(cfg *setting.MySQLConfig) (err error) {
 	// "user:password@tcp(host:port)/dbname"
@@ -35,7 +37,7 @@ func Init(cfg *setting.MySQLConfig) (err error) {
 	//// SetConnMaxLifetime 设置了连接可复用的最大时间。
 	//sqlDB.SetConnMaxLifetime(time.Hour)
 
-	//db.DB().SetMaxIdleConns(cfg.MaxIdleConns)
+	//SqlDb.Close()
 	return
 }
 

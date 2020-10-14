@@ -13,10 +13,18 @@ func SetupRouter(mode string) *gin.Engine {
 
 	r := gin.Default()
 
+	r.POST("signup", controller.SignUp)
+	r.POST("login", controller.Login)
+
 	r.POST("/file", controller.FileUpload)
 	r.GET("/files", controller.FileAllInfo)
-	r.GET("/file/:file_id", controller.FileInfo)
-	r.GET("/file/:file_id", controller.FileDownload)
+	r.GET("/file/info/:file_id", controller.FileInfo)
+	r.GET("/file/download/:file_id", controller.FileDownload)
+
+	r.POST("/file/mp/init", controller.FileMultiPartInit)
+	r.POST("/file/mp/upload", controller.FileMultiPartUpload)
+	r.POST("/file/mp/complete", controller.FileMultiPartComplete)
+
 	//r := gin.New()
 	//r.Use(logger.GinLogger(), logger.GinRecovery(true))
 

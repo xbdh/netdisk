@@ -14,10 +14,10 @@ log:
 
 mysql:
   host: "127.0.0.1"
-  port: 13306
+  port: 3306
   user: "root"
-  password: "root1234"
-  dbname: "bluebell"
+  password: "0315"
+  dbname: "netdisk"
   max_open_conns: 200
   max_idle_conns: 50
 
