@@ -3,13 +3,16 @@ package controller
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"math"
 	"net/http"
 	"netdisk/dao/mysql"
+	"netdisk/dao/redis"
 	"netdisk/model"
 	"netdisk/pkg/snowflake"
 	"netdisk/util"
 	"os"
+	"path"
 	"strconv"
 
 	"go.uber.org/zap"
@@ -117,16 +120,12 @@ func FileDownload(c *gin.Context) {
 	c.Writer.Write(data)
 }
 
-func FileMultiPartUpload(c *gin.Context) {
-
-	//c.ShouldBindJSON
-
-}
 func FileMultiPartInit(c *gin.Context) {
 	username := c.PostForm("username")
+	filename := c.PostForm("filename")
 	filehash := c.PostForm("filehash")
 	filesize, _ := strconv.Atoi(c.PostForm("filesize"))
-	filename := c.PostForm("filename")
+
 	sfid, _ := snowflake.GetID()
 
 	filetotalinfo := MutiPartFileInfo{
@@ -138,10 +137,67 @@ func FileMultiPartInit(c *gin.Context) {
 		ChunkSize:  10 * 1024 * 2014,
 		ChunkCount: int(math.Ceil(float64(filesize) / (10 * 1024 * 1024))),
 	}
+
+	redis.FileMultiPartUploadInfo("mpupload", "chunkcount", filetotalinfo.ChunkCount)
+	redis.FileMultiPartUploadInfo("mpupload", "filehash", filetotalinfo.Hash)
+	redis.FileMultiPartUploadInfo("mpupload", "filesize", filetotalinfo.Size)
+	redis.FileMultiPartUploadInfo("mpupload", "fileid", filetotalinfo.FileId)
+
 	c.JSON(http.StatusOK, filetotalinfo)
 
 }
+
+func FileMultiPartUpload(c *gin.Context) {
+	file_id := c.PostForm("FileID")
+	//file_hash := c.PostForm("Hash")
+	index := c.PostForm("ChunkId")
+	uploadfile, err := c.FormFile("file")
+
+	//rmp := map[string]string{
+	//	"file_id":   file_id,
+	//	"file_hash": file_hash,
+	//	"index":     index,
+	//}
+	fpath := "/home/chen/file/temp" + file_id + "_" + index
+	os.MkdirAll(path.Dir(fpath), 0744)
+
+	if err != nil {
+		log.Panicln(err, "打开文件错误")
+		return
+	}
+	c.SaveUploadedFile(uploadfile, fpath)
+
+	redis.FileMultiPartUploadInfo("uploadmp", "chunk"+index, 1)
+
+	//c.ShouldBindJSON
+
+	c.JSON(http.StatusOK, nil)
+
+}
 func FileMultiPartComplete(c *gin.Context) {
-	form, _ := c.MultipartForm()
+	//username := c.PostForm("username")
+	filename := c.PostForm("filename")
+	filehash := c.PostForm("filehash")
+	fileid, _ := strconv.Atoi(c.PostForm("fileid"))
+	filesize, _ := strconv.Atoi(c.PostForm("filesize"))
+
+	fileinfo := model.FileInfo{
+		FileId:   uint64(fileid),
+		Size:     int64(filesize),
+		Name:     filename,
+		Hash:     filehash,
+		Location: "",
+	}
+
+	//通知 合并 文件
+
+	// 更新文件表，用户文件表
+	if redis.FileMultiPartUploadIsComplete("upload") {
+		mysql.Db.Create(&fileinfo)
+		c.JSON(http.StatusOK, nil)
+	} else {
+		c.JSON(http.StatusInternalServerError, nil)
+	}
+	//form, _ := c.MultipartForm()
 
 }
