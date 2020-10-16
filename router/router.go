@@ -16,6 +16,8 @@ func SetupRouter(mode string) *gin.Engine {
 	r.POST("/signup", controller.SignUp)
 	r.POST("/login", controller.Login)
 
+	//r.Use(middleware.JWTAuthMiddleware())
+
 	r.POST("/file", controller.FileUpload)
 	r.GET("/files", controller.FileAllInfo)
 	r.GET("/file/info/:file_id", controller.FileInfo)

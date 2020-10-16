@@ -138,40 +138,51 @@ func FileMultiPartInit(c *gin.Context) {
 		FileId:     sfid,
 		Hash:       filehash,
 		Size:       int64(filesize),
-		ChunkSize:  10 * 1024 * 2014,
+		ChunkSize:  10 * 1024 * 1014,
 		ChunkCount: int(math.Ceil(float64(filesize) / (10 * 1024 * 1024))),
 	}
 
-	redis.FileMultiPartUploadInfo("mpupload", "chunkcount", filetotalinfo.ChunkCount)
-	redis.FileMultiPartUploadInfo("mpupload", "filehash", filetotalinfo.Hash)
-	redis.FileMultiPartUploadInfo("mpupload", "filesize", filetotalinfo.Size)
-	redis.FileMultiPartUploadInfo("mpupload", "fileid", filetotalinfo.FileId)
+	//redis.FileMultiPartUploadInfo("mpupload", "chunkcount", filetotalinfo.ChunkCount)
+	//redis.FileMultiPartUploadInfo("mpupload", "filehash", filetotalinfo.Hash)
+	//redis.FileMultiPartUploadInfo("mpupload", "filesize", filetotalinfo.Size)
+	//redis.FileMultiPartUploadInfo("mpupload", "fileid", filetotalinfo.FileId)
 
 	c.JSON(http.StatusOK, filetotalinfo)
 
 }
 
 func FileMultiPartUpload(c *gin.Context) {
-	file_id := c.PostForm("FileID")
+	file_id := c.Query("fileid")
 	//file_hash := c.PostForm("Hash")
-	index := c.PostForm("ChunkId")
-	uploadfile, err := c.FormFile("file")
+	index := c.Query("chunkid")
+	//file_id := c.PostForm("fileid")
+	////file_hash := c.PostForm("Hash")
+	//index := c.PostForm("chunkid")
+	//uploadfile, err := c.FormFile("file")
 
-	//rmp := map[string]string{
-	//	"file_id":   file_id,
-	//	"file_hash": file_hash,
-	//	"index":     index,
-	//}
-	fpath := "/home/chen/file/temp" + file_id + "_" + index
+	fpath := "/home/chen/file/temp/" + file_id + "_" + index
 	os.MkdirAll(path.Dir(fpath), 0744)
-
+	fd, err := os.Create(fpath)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	defer fd.Close()
+	buf := make([]byte, 1024*1024)
+	for {
+		n, err := c.Request.Body.Read(buf)
+		fd.Write(buf[:n])
+		if err != nil {
+			break
+		}
+	}
 	if err != nil {
 		log.Panicln(err, "打开文件错误")
 		return
 	}
-	c.SaveUploadedFile(uploadfile, fpath)
+	//c.SaveUploadedFile(uploadfile, fpath)
 
-	redis.FileMultiPartUploadInfo("uploadmp", "chunk"+index, 1)
+	//redis.FileMultiPartUploadInfo("uploadmp", "chunk"+index, 1)
 
 	//c.ShouldBindJSON
 

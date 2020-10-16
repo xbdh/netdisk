@@ -1,2 +1,4 @@
 .idea/
 .web_app.go
+.temp/
+.test/

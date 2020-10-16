@@ -23,7 +23,7 @@ func FileMultiPartUploadIsComplete(redisKey string) bool {
 	mapcmd := client.HGetAll("mpload")
 	if mapcmd.Err() != nil {
 		log.Panicln("redis 错误", mapcmd.Err())
-		return
+		return false
 	}
 	data := mapcmd.Val()
 	totalCount := 0

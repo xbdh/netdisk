@@ -1,8 +1,9 @@
 package mysql
 
 import (
-	"crypto/md5"
+	"crypto/sha1"
 	"encoding/hex"
+	"fmt"
 	"netdisk/model"
 	"netdisk/pkg/snowflake"
 	"strconv"
@@ -12,8 +13,11 @@ const secret = "liwenzhou.com"
 
 // encryptPassword 加密算法
 func encryptPassword(data []byte) (result string) {
-	h := md5.New()
+	h := sha1.New()
 	h.Write([]byte(secret))
+	fmt.Println(data)
+	fmt.Println(h.Sum(data))
+	fmt.Println(hex.EncodeToString(h.Sum(data)))
 	return hex.EncodeToString(h.Sum(data))
 }
 
@@ -22,7 +26,7 @@ func Register(user *model.User) (err error) {
 	//var count int64
 	//err = Db.Get(&count, sqlStr, user.UserName)
 
-	result := Db.Where("username = ?", user.UserName).Find(user)
+	result := Db.Where("user_name = ?", user.UserName).Find(user)
 	if result.Error != nil {
 		return err
 	}
@@ -55,7 +59,7 @@ func Login(user *model.User) (err error) {
 	originPassword := user.Password // 记录一下原始密码
 	//sqlStr := "select user_id, username, password from user where username = ?"
 	//err = Db.Get(user, sqlStr, user.UserName)
-	err = Db.Where("username = ?", user.UserName).Find(user).Error
+	err = Db.Where("user_name = ?", user.UserName).Find(user).Error
 
 	//if err != nil && err != sql.ErrNoRows {
 	//	// 查询数据库出错
@@ -76,6 +80,7 @@ func GetUserByID(idStr string) (user *model.User, err error) {
 	user = new(model.User)
 	//sqlStr := `select user_id, username from user where user_id = ?`
 	//err = Db.Get(user, sqlStr, idStr)
-	Db.Where("user_id = ?", strconv.Atoi(idStr))
+	id, _ := strconv.Atoi(idStr)
+	Db.Where("user_id = ?", id)
 	return
 }
