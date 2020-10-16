@@ -20,6 +20,8 @@ type AppConfig struct {
 	*LogConfig   `mapstructure:"log"`
 	*MySQLConfig `mapstructure:"mysql"`
 	*RedisConfig `mapstructure:"redis"`
+	*OSSConfig   `mapstructure:"oss"`
+	*MqConfig    `mapstructure:"mq"`
 }
 
 type MySQLConfig struct {
@@ -47,6 +49,16 @@ type LogConfig struct {
 	MaxSize    int    `mapstructure:"max_size"`
 	MaxAge     int    `mapstructure:"max_age"`
 	MaxBackups int    `mapstructure:"max_backups"`
+}
+type OSSConfig struct {
+	EndPoint        string `mapstructure:"endpoint"`
+	AccessKeyId     string `mapstructure:"accesskeyid"`
+	AccessKeySecret string `mapstructure:"accesskeysecret"`
+	BucketName      string `mapstructure:"bucketname"`
+}
+type MqConfig struct {
+	Host string `mapstructure:"host"`
+	Port string `mapstructure:"port"`
 }
 
 //func Init(filePath string) (err error) {

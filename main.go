@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"netdisk/dao/mysql"
 	"netdisk/logger"
+	"netdisk/mq"
 	"netdisk/pkg/snowflake"
 	"netdisk/router"
 	"netdisk/setting"
+	"netdisk/store/oss"
 )
 
 func main() {
@@ -22,6 +24,14 @@ func main() {
 	}
 	if err := mysql.Init(setting.Conf.MySQLConfig); err != nil {
 		fmt.Printf("init mysql failed, err:%v\n", err)
+		return
+	}
+	if err := oss.Init(setting.Conf.OSSConfig); err != nil {
+		fmt.Printf("init oss failed, err:%v\n", err)
+		return
+	}
+	if err := mq.Init(setting.Conf.MqConfig); err != nil {
+		fmt.Printf("init rabbitmq failed, err:%v\n", err)
 		return
 	}
 	////defer mysql.Close() // 程序退出关闭数据库连接

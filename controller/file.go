@@ -10,6 +10,7 @@ import (
 	"netdisk/dao/redis"
 	"netdisk/model"
 	"netdisk/pkg/snowflake"
+	"netdisk/store/oss"
 	"netdisk/util"
 	"os"
 	"path"
@@ -57,8 +58,11 @@ func FileUpload(c *gin.Context) {
 		fmt.Printf("数据上传数据库失败 55555%v\n", err)
 		return
 	}
-
+	// 上传本地
 	err = c.SaveUploadedFile(fileHeader, Storage+name)
+
+	// 上传到 oss
+	err = oss.UploadLocalFile("netdisk", Storage+name)
 	if err != nil {
 		fmt.Println("保存失败", err)
 		return

@@ -3,6 +3,7 @@ module netdisk
 go 1.15
 
 require (
+	github.com/aliyun/aliyun-oss-go-sdk v2.1.4+incompatible
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fsnotify/fsnotify v1.4.9
 	github.com/gin-gonic/gin v1.6.3
@@ -12,6 +13,7 @@ require (
 	github.com/onsi/gomega v1.10.3 // indirect
 	github.com/sony/sonyflake v1.0.0
 	github.com/spf13/viper v1.7.1
+	github.com/streadway/amqp v1.0.0
 	go.uber.org/zap v1.10.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 	gorm.io/driver/mysql v1.0.2
