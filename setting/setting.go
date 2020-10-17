@@ -57,8 +57,11 @@ type OSSConfig struct {
 	BucketName      string `mapstructure:"bucketname"`
 }
 type MqConfig struct {
-	Host string `mapstructure:"host"`
-	Port string `mapstructure:"port"`
+	Host     string `mapstructure:"host"`
+	Port     int    `mapstructure:"port"`
+	UserName string `mapstructure: "username"`
+	Password string `mapstructure: "password"`
+	Vhost    string `mapstructure: "vhost"`
 }
 
 //func Init(filePath string) (err error) {
