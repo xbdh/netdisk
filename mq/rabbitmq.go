@@ -104,11 +104,13 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/aliyun/aliyun-oss-go-sdk/oss"
+
 	"github.com/streadway/amqp"
 )
 
 //连接信息
-const MQURL = "amqp://imoocuser:imoocuser@127.0.0.1:5672/imooc"
+const MQURL = "amqp://chen:0315@127.0.0.1:5672/netdisk"
 
 //rabbitMQ结构体
 type RabbitMQ struct {
@@ -236,12 +238,33 @@ func (r *RabbitMQ) ConsumeSimple() {
 		for d := range msgs {
 			//消息逻辑处理，可以自行设计逻辑
 			log.Printf("Received a message: %s", d.Body)
+			// 上传到 oss
+			//
+			Client, err := oss.New("https://oss-cn-beijing.aliyuncs.com", "LTAI4GFf6RwXYgKc4YHX4nAt", "FSH7p2kaedo06rlVa98QX1vXgm4ncT")
+
+			if err != nil {
+				fmt.Println(err.Error())
+				return
+			}
+
+			name := fmt.Sprintf("%s", d.Body)
+			bucket, err := Client.Bucket("netdiskoss")
+			if err != nil {
+				log.Panicln("buket not found", err)
+				return
+			}
+			err = bucket.PutObjectFromFile("yibu/"+"helo.jpg", name)
+			if err != nil {
+				log.Panicln("put object wrong", err)
+				return
+			}
+			return
 
 		}
 	}()
+	forever <- false
 
 	log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
-	<-forever
 
 }
 

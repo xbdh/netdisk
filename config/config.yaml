@@ -16,7 +16,7 @@ mysql:
   host: "127.0.0.1"
   port: 3306
   user: "root"
-  password: "0315"
+  password: "123456"
   dbname: "netdisk"
   max_open_conns: 200
   max_idle_conns: 50
@@ -29,10 +29,10 @@ redis:
   pool_size: 100
 
 oss:
-  endpoint:
-  accesskeyid:
-  accesskeysecret:
-  bucketname:
+  endpoint: "https://oss-cn-beijing.aliyuncs.com"
+  accesskeyid: "LTAI4GFf6RwXYgKc4YHX4nAt"
+  accesskeysecret: "FSH7p2kaedo06rlVa98QX1vXgm4ncT"
+  bucketname: "netdiskoss"
 
 mq:
   host: "127.0.0.1"

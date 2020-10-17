@@ -9,6 +9,7 @@ import (
 	"netdisk/dao/mysql"
 	"netdisk/dao/redis"
 	"netdisk/model"
+	"netdisk/mq"
 	"netdisk/pkg/snowflake"
 	"netdisk/store/oss"
 	"netdisk/util"
@@ -62,11 +63,17 @@ func FileUpload(c *gin.Context) {
 	err = c.SaveUploadedFile(fileHeader, Storage+name)
 
 	// 上传到 oss
-	err = oss.UploadLocalFile("netdisk", Storage+name)
+	err = oss.UploadLocalFile("test/"+name, Storage+name)
 	if err != nil {
 		fmt.Println("保存失败", err)
 		return
 	}
+	fmt.Println("文件传到oss成功")
+
+	// 异步上传到oss
+	rabbitmq := mq.NewRabbitMQSimple("oss")
+	rabbitmq.PublishSimple(Storage + name)
+
 	c.JSON(http.StatusOK, fileinfo)
 }
 

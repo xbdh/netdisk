@@ -53,3 +53,14 @@
 {"level":"INFO","time":"2020-10-16T20:18:01.890+0800","caller":"logger/logger.go:45","msg":"init logger success"}
 {"level":"INFO","time":"2020-10-16T20:18:02.355+0800","caller":"logger/logger.go:45","msg":"init logger success"}
 {"level":"INFO","time":"2020-10-16T20:20:30.960+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2020-10-17T12:35:27.036+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2020-10-17T12:36:54.161+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2020-10-17T12:39:53.548+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2020-10-17T12:40:04.283+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2020-10-17T12:40:30.780+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2020-10-17T12:41:04.609+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2020-10-17T12:41:07.477+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2020-10-17T12:41:19.086+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2020-10-17T13:11:58.954+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2020-10-17T13:21:11.674+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2020-10-17T13:57:02.564+0800","caller":"logger/logger.go:45","msg":"init logger success"}
